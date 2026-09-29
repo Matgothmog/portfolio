@@ -87,8 +87,9 @@ catch mistakes.
 
 ## Deploy
 
-The repository is private and not currently published. To publish via
-GitHub Pages, serve the built `dist/` output rather than the repository root.
-Since `dist/` is gitignored, that means either a Pages workflow that runs
-`python3 build.py` and deploys `dist/`, or pushing the built output to the
-branch Pages serves from.
+The site is published with GitHub Pages at
+https://matgothmog.github.io/portfolio/. The workflow in
+`.github/workflows/deploy.yml` runs on every push to `main` (and on manual
+dispatch): it builds the site with `python3 build.py` and deploys the
+resulting `dist/` directory through the Pages Actions source. `dist/` stays
+gitignored; only the workflow publishes it.
