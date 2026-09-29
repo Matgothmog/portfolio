@@ -1,0 +1,172 @@
+[
+  {
+    "number": 13995,
+    "rank": 11,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13995",
+    "tag": "Network / eth/70 (tests)",
+    "title": "Cover the `ReceiptsMessageSerializer70` wire format and guard",
+    "diff": { "add": 66, "del": 0 },
+    "merged": "2026-09-28",
+    "description": "`Eth70ProtocolHandlerTests` only push `ReceiptsMessage70` through a write-then-read round trip, so an encoding error mirrored on both sides passes them. New `ReceiptsMessageSerializer70Tests` pin the `[request-id, lastBlockIncomplete, [[receipt, ...], ...]]` layout (EIP-7975) against expected hex for four empty/non-empty and complete/incomplete cases, and assert that `Deserialize` rejects a `lastBlockIncomplete` value other than 0 or 1. Mutation checks confirmed the new tests fail when the flag is inverted or the guard is loosened; no production code changed."
+  },
+  {
+    "number": 13996,
+    "rank": 12,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13996",
+    "tag": "Core / NativeAOT",
+    "title": "Skip `TypeDiscovery`'s assembly walk under NativeAOT",
+    "diff": { "add": 2, "del": 1 },
+    "merged": "2026-09-28",
+    "description": "`TypeDiscovery.LoadAllImpl` walked `Assembly.GetReferencedAssemblies()`, which throws `PlatformNotSupportedException` under NativeAOT, so the first call into `TypeDiscovery.Initialize()` — reached from `ConfigProvider.GetConfig<T>()` among others — crashed the host. NativeAOT can't load assemblies at runtime, so the walk had nothing to add there; it now runs only when `RuntimeFeature.IsDynamicCodeSupported`, the same check the VM's opcode handlers already use to detect NativeAOT."
+  },
+  {
+    "number": 14004,
+    "rank": 8,
+    "url": "https://github.com/NethermindEth/nethermind/pull/14004",
+    "tag": "Core / NativeAOT",
+    "title": "Preserve `ConcurrentDictionary` internals under NativeAOT",
+    "diff": { "add": 9, "del": 0 },
+    "merged": "2026-09-28",
+    "description": "`NoResizeClear` and `NoLockClear` reach `ConcurrentDictionary<,>`'s private members by reflection, which ILC cannot resolve at compile time and so trims. Under a NativeAOT publish, the first `NoResizeClear` call threw `NotSupportedException` and the first `NoLockClear` call threw `ArgumentNullException`, both before doing any work. `ConcurrentDictionaryLock<,>` and `ClearCache<,>` now root those members with `[DynamicDependency]`, each paired with an `[UnconditionalSuppressMessage]` for the trim warning, with no method body changes."
+  },
+  {
+    "number": 13506,
+    "rank": 1,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13506",
+    "tag": "Network / TxPool",
+    "title": "Reject oversized transactions before decoding",
+    "diff": { "add": 306, "del": 6 },
+    "merged": "2026-09-25",
+    "description": "Each item in a broadcast `Transactions` message is now measured against `ITxPoolConfig.MaxTxSize` before it is decoded, and skipped rather than fully parsed when it's over the cap; blob (type-3) items are never skipped. A skipped item is still reported to `TxFloodController` as `MaxTxSizeExceeded`, so a peer flooding oversized broadcasts still hits the existing downgrade and disconnect thresholds, tracked separately in a new `Metrics.OversizedTransactionsSkipped`."
+  },
+  {
+    "number": 13516,
+    "rank": 10,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13516",
+    "tag": "JSON-RPC (debug)",
+    "title": "Check the parent's state when tracing a transaction by index",
+    "diff": { "add": 218, "del": 20 },
+    "merged": "2026-09-25",
+    "description": "`debug_traceTransactionByBlockAndIndex` and `debug_traceTransactionByBlockhashAndIndex` replay a transaction starting from its block's parent state, but the guard checked the target block's own state instead — rejecting a block whose own state was never committed, such as a side-chain block never made canonical, with a \"no state available\" error even though the replay never needed it. The new `CheckTraceBaseState` guard checks the parent header instead, skipping genesis, which has none."
+  },
+  {
+    "number": 13832,
+    "rank": 2,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13832",
+    "tag": "Network / P2P",
+    "title": "Disconnect peers that send a second `Hello`",
+    "diff": { "add": 132, "del": 2 },
+    "merged": "2026-09-25",
+    "description": "`P2PProtocolHandler` re-ran capability negotiation on every repeated `Hello` on a session, appending to `_agreedCapabilities` without ever clearing it. An ordinary peer got disconnected when the re-run collided with an already-started subprotocol, but static and trusted peers were exempt from that exception path, so one could keep repeating `Hello` and grow its agreed list indefinitely. The handler now disconnects on any `Hello` after the first, matching geth and reth."
+  },
+  {
+    "number": 13833,
+    "rank": 3,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13833",
+    "tag": "Engine API",
+    "title": "Gate `getPayloadV3` and `getPayloadV4` on execution requests, not EIP-7623",
+    "diff": { "add": 38, "del": 2 },
+    "merged": "2026-09-25",
+    "description": "`GetPayloadV3Result.ValidateFork` and `GetPayloadV4Result.ValidateFork` split their fork windows on `IsEip7623Enabled`, an unrelated chainspec transition, instead of `RequestsEnabled`. On a spec that activates EIP-7623 and the request EIPs at different timestamps, that could serve `getPayloadV4` without its required execution-requests list, or refuse it and fall back to `getPayloadV3` after they activate — both against the execution-apis spec. Both methods now key on `RequestsEnabled`, like every other consumer of execution requests."
+  },
+  {
+    "number": 13366,
+    "rank": 4,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13366",
+    "tag": "JSON-RPC (proof)",
+    "title": "Return null from the proof methods for a transaction they cannot serve",
+    "diff": { "add": 754, "del": 64 },
+    "merged": "2026-09-23",
+    "description": "`proof_getTransactionByHash` and `proof_getTransactionReceipt` could crash with an internal error or serve a wrong transaction's proof once a reorg desynced the stored transaction index from the canonical chain, where `eth_getTransactionByHash`/`eth_getTransactionReceipt` just return null. Both proof methods now return `Success(null)` in that case, matching their `eth_` equivalents, and `proof_getTransactionReceipt` answers `ResourceUnavailable` instead of a hollow proof when the block can no longer be retraced. Breaking change: callers that branch on an error object for a missing transaction now see a well-formed null result instead."
+  },
+  {
+    "number": 13485,
+    "rank": 16,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13485",
+    "tag": "Pruning / State",
+    "title": "Warn when the free-space pruning threshold is too low to ever run",
+    "diff": { "add": 130, "del": 6 },
+    "merged": "2026-09-23",
+    "description": "`FullPrunerFactory` now warns at startup when `Pruning.FullPruningTrigger=VolumeFreeSpace` is set with a `FullPruningThresholdMb` too low to ever be observed: the trigger fires below that threshold, but pruning only proceeds once free space is at least 130% of the chain's estimated size, so a threshold at or under that bound satisfies neither. It warns rather than throws, since the stock default already trips this on Mainnet as chain size grows and disabling an opportunistic job isn't worth refusing every upgrading node."
+  },
+  {
+    "number": 13138,
+    "rank": 13,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13138",
+    "tag": "JSON-RPC (debug)",
+    "title": "Resolve block tags in `debug_traceTransactionByBlockAndIndex`",
+    "diff": { "add": 164, "del": 51 },
+    "merged": "2026-09-15",
+    "description": "The RPC only accepted a numeric block, so tags like `latest`/`pending`/`safe`/`finalized` and block hashes returned an internal error instead of a trace. The fix resolves the block from the header the handler already looked up (by hash, so it can't fall back to a different canonical block at the same height) and adds a lower-bound check on the transaction index — closing a documented-but-broken tracing surface."
+  },
+  {
+    "number": 13275,
+    "rank": 6,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13275",
+    "tag": "EF / state-test tooling (nethtest)",
+    "title": "Report a state-test fixture that fails to load",
+    "diff": { "add": 344, "del": 7 },
+    "merged": "2026-09-15",
+    "description": "`nethtest --stateTest` silently printed `[]` with exit code 0 for a fixture it failed to parse — indistinguishable from a fixture with zero test cases, a real problem for differential fuzzing. The load failure is now carried as a test that survives a type filter that had been discarding it, and the runner reports it instead of asserting internally. Surfaced 7 previously-invisible fixtures that now load and pass."
+  },
+  {
+    "number": 13419,
+    "rank": 15,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13419",
+    "tag": "Logging (NLog/Seq)",
+    "title": "Stop `Init.LogRules` bypassing `Seq.MinLevel`",
+    "diff": { "add": 391, "del": 14 },
+    "merged": "2026-09-15",
+    "description": "A rule synthesized from the `Init.LogRules` flag was fanned out to every logging target including Seq, so raising a namespace's log level also shipped trace/debug logs to Seq regardless of the `Seq.MinLevel` floor. The fix walks the target graph — wrappers and groups included — to exclude anything reaching Seq while preserving explicit `writeTo=\"seq\"` rules, protecting operators from unexpected Seq ingestion volume."
+  },
+  {
+    "number": 13456,
+    "rank": 17,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13456",
+    "tag": "Pruning / State",
+    "title": "Skip the disk-space probe when the availability check is disabled",
+    "diff": { "add": 50, "del": 6 },
+    "merged": "2026-09-15",
+    "description": "`Pruning.AvailableSpaceCheckEnabled=false` didn't actually stop the disk-space probe in `FullPruner.OnPrune` — the guard order meant it still ran on every pruning trigger and logged a misleading recurring \"not enough disk space\" warning even though pruning proceeded. Reordered the guard so the flag short-circuits the probe."
+  },
+  {
+    "number": 13416,
+    "rank": 9,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13416",
+    "tag": "Core / monitoring",
+    "title": "Stop `ElapsedMicroseconds` overflowing on long-running stopwatches",
+    "diff": { "add": 53, "del": 1 },
+    "merged": "2026-09-14",
+    "description": "`StopwatchExtensions.ElapsedMicroseconds` multiplied ticks by 1,000,000 before dividing, overflowing a 64-bit long after roughly 2h33m on Linux and wrapping negative — the cause of negative \"slot ms\" values in monitoring. Rewrote the conversion to split whole seconds from the remainder before scaling so nothing overflows, fixing long-running-node metrics accuracy."
+  },
+  {
+    "number": 13324,
+    "rank": 14,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13324",
+    "tag": "JSON-RPC (debug)",
+    "title": "Dispose the block traces `debug_traceTransactionInBlockByIndex` discards",
+    "diff": { "add": 110, "del": 1 },
+    "merged": "2026-09-11",
+    "description": "This endpoint traces every transaction in a block but returns one; the other N-1 traces — which can own a JS-tracer engine or pooled array rentals — were dropped without disposal, leaking cleanup to finalizers/GC. Found by comparing the call site against sibling endpoints that already dispose correctly, improving resource hygiene under heavy tracing."
+  },
+  {
+    "number": 13353,
+    "rank": 5,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13353",
+    "tag": "EthStats / monitoring",
+    "title": "Stop a malformed EthStats ping timestamp from terminating the node",
+    "diff": { "add": 56, "del": 4 },
+    "merged": "2026-09-10",
+    "description": "`EthStatsClient` parsed a heartbeat timestamp with `long.Parse` behind a guard that could never fire; a non-numeric or out-of-range value threw, and because the handler was effectively async void the exception escaped to the thread pool and crashed the whole node. Replaced with `TryParse` and a safe fallback — only affects nodes with EthStats enabled, but for those it was process-killing."
+  },
+  {
+    "number": 13235,
+    "rank": 7,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13235",
+    "tag": "JSON-RPC",
+    "title": "Reject a missing-argument marker on a required parameter",
+    "diff": { "add": 96, "del": 39 },
+    "merged": "2026-09-07",
+    "description": "An empty/null marker for an omitted argument was only checked at the tail of the parameter list, so a marker elsewhere bound a required parameter to null and the module crashed with an internal error instead of returning a clean \"invalid params\". Also fixed a related index-out-of-range on over-long requests — turning crashes into well-formed client errors for every required JSON-RPC parameter."
+  }
+]

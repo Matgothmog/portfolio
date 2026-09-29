@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matgothmog — Student Software &amp; Security Engineer</title>
+<meta name="description" content="Portfolio of Matgothmog — Ethereum client contributor and offensive-security practitioner.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d1117'/%3E%3Ctext x='32' y='43' font-family='monospace' font-size='30' font-weight='700' fill='%2345e8c8' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">MP<span class="brand-dot">.</span></a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="site-nav" id="siteNav">
+      <a href="#nethermind">Nethermind</a>
+      <a href="#bug-bounty">Bug Bounty</a>
+      <a href="#ensimag-pentest">Ensimag</a>
+      <a href="#postage">Postage</a>
+      <a class="nav-cta" href="https://github.com/Matgothmog" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <p class="hero-eyebrow">Portfolio</p>
+      <h1>Matgothmog</h1>
+      <p class="hero-tagline">Student software &amp; security engineer — Ethereum client contributor, offensive-security practitioner.</p>
+      <div class="hero-links">
+        <a class="btn btn-primary" href="https://github.com/Matgothmog" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="nethermind">
+    <div class="wrap">
+      <header class="section-head">
+        <h2>Open-source: Nethermind</h2>
+        <p class="section-intro">Merged contributions to <a href="https://github.com/NethermindEth/nethermind" target="_blank" rel="noopener">NethermindEth/nethermind</a>, the Ethereum execution client.</p>
+      </header>
+
+      <div class="card-grid">
+
+        <!-- PR_CARDS -->
+
+      </div>
+
+      <!-- ALL_PRS_LINK -->
+    </div>
+  </section>
+
+  <section class="section section-alt" id="bug-bounty">
+    <div class="wrap">
+      <header class="section-head">
+        <h2>Ethereum Foundation — Bug Bounty</h2>
+        <p class="section-intro">Findings are under coordinated disclosure / NDA. Details will be added once cleared.</p>
+      </header>
+
+      <div class="project-body">
+        <p>One high-severity and three medium-severity findings are currently being examined by the Ethereum Foundation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ensimag-pentest">
+    <div class="wrap">
+      <header class="section-head">
+        <h2>Ensimag — AI pentesting</h2>
+        <p class="section-intro">A self-hosted, locally deployed system that orchestrates specialized AI agents over real reconnaissance and security tooling, built for Ensimag (Grenoble INP).</p>
+      </header>
+
+      <div class="card-grid">
+        <article class="card">
+          <h3>Separation of duties</h3>
+          <p class="card-body">Reconnaissance, attack ideation, and exploitation are distinct agents with non-overlapping tool permissions. An exploit can only run after an explicit human approval gate, never because a prompt asked for it.</p>
+        </article>
+
+        <article class="card">
+          <h3>Evidence integrity</h3>
+          <p class="card-body">The reporting agent is not trusted. Findings are corroborated by an independently written audit trail and reproduced by a second, context-isolated agent.</p>
+        </article>
+
+        <article class="card">
+          <h3>Scope and kill-switch guard</h3>
+          <p class="card-body">A guard sits beneath every command path, including the arbitrary shell escape hatch, enforcing scope and an emergency kill switch that halts all activity immediately, so contacting an out-of-scope target cannot be routed around by a cleverly ordered command.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="postage">
+    <div class="wrap">
+      <header class="section-head">
+        <h2>Postage — ETHOnline 2026</h2>
+        <p class="section-intro">An email gateway that puts a price on strangers' mail.</p>
+      </header>
+
+      <figure class="project-banner">
+        <img src="assets/img/postage-cover.png" alt="Postage project cover banner" loading="lazy">
+      </figure>
+
+      <div class="project-body">
+        <p>Postage is an email gateway that puts a price on strangers' mail. You hand out a <code>you@usepostage.com</code> address; incoming mail is held and classified — expected mail (login codes, receipts) and mail proven human-written pass free, while unproven automated mail (marketing, newsletters) must pay a small USDC fee to reach your real inbox, and deceptive mail is never delivered. Personhood is proven with a World ID Selfie Check bound onchain to a wallet; escrow, pricing signatures, and settlement run on the Arc testnet, with The Graph indexing payments and verdicts. Built during ETHOnline 2026 as a proof of concept.</p>
+
+        <div class="project-links">
+          <a class="btn btn-primary" href="https://postage-seven.vercel.app" target="_blank" rel="noopener">Live demo</a>
+          <a class="btn btn-outline" href="https://github.com/Matgothmog/postage" target="_blank" rel="noopener">Source code</a>
+        </div>
+
+        <ul class="stack-tags">
+          <li>Next.js 16</li>
+          <li>React 19</li>
+          <li>TypeScript</li>
+          <li>Tailwind 4</li>
+          <li>Privy</li>
+          <li>World ID (IDKit)</li>
+          <li>viem</li>
+          <li>Turso (libSQL)</li>
+          <li>Cloudflare Worker + postal-mime</li>
+          <li>Solidity 0.8.28 / Foundry (Arc testnet)</li>
+          <li>The Graph subgraph</li>
+          <li>Mailgun</li>
+        </ul>
+      </div>
+
+      <div class="gallery">
+        <figure class="gallery-item">
+          <img src="assets/img/postage-01-landing.png" alt="Postage landing page" loading="lazy">
+          <figcaption>Landing page</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="assets/img/postage-02-network.png" alt="Postage network / mail flow view" loading="lazy">
+          <figcaption>Network view</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="assets/img/postage-03-challenge.png" alt="Postage World ID personhood challenge screen" loading="lazy">
+          <figcaption>Personhood challenge</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="assets/img/postage-05-attestation-tx.png" alt="Postage onchain attestation transaction" loading="lazy">
+          <figcaption>Onchain attestation</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>Matgothmog</p>
+    <a href="https://github.com/Matgothmog" target="_blank" rel="noopener">github.com/Matgothmog</a>
+    <p class="footer-note">Built with plain HTML &amp; CSS.</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
