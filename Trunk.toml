@@ -1,0 +1,16 @@
+# The public URL is deliberately not set here: deploys pass `--public-url /portfolio/`,
+# while local `trunk serve` uses the default `/`.
+[build]
+target = "index.html"
+dist = "dist"
+
+# The app shell is copied to every path the router owns so GitHub Pages answers them with
+# HTTP 200 instead of the 404.html fallback: /prs and /prs/ (prs/index.html) and the old
+# /prs.html. 404.html itself covers unknown paths, which render the router's Not Found.
+[[hooks]]
+stage = "post_build"
+command = "sh"
+command_arguments = [
+  "-c",
+  "set -e; d=\"$TRUNK_STAGING_DIR\"; mkdir -p \"$d/prs\"; cp \"$d/index.html\" \"$d/404.html\"; cp \"$d/index.html\" \"$d/prs.html\"; cp \"$d/index.html\" \"$d/prs/index.html\"",
+]

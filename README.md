@@ -4,69 +4,89 @@ Personal portfolio for Matgothmog — a static site covering open-source
 contributions to Nethermind, Ethereum Foundation bug-bounty work, and the
 Postage project from ETHOnline 2026.
 
+Published at https://matgothmog.github.io/portfolio/.
+
 ## Stack
 
-Plain HTML, CSS, and a small vanilla JS file for the mobile nav toggle. No
-framework, no runtime dependencies. The pages are generated from templates
-and a data file by a small build script that uses only the Python standard
-library. All asset references are relative, so the built site works unchanged
-from a project-pages URL (`matgothmog.github.io/portfolio`) or from a
-user-pages root.
+Built with Rust using Leptos 0.8 (client-side rendered), bundled by Trunk 0.21
+into a WebAssembly app. No JavaScript dependencies: the only script outside the
+wasm bundle is a small inline snippet in `index.html` that sets the theme before
+first paint. The app renders two routes (`/` and `/prs`, plus the `/index.html`
+and `/prs.html` aliases for old URLs). PR data is embedded from `data/prs.json`
+with `include_str!` and parsed and validated at runtime by `load_prs` in `src/data.rs`. A
+`<noscript>` fallback in `index.html` covers browsers without JavaScript.
+
+## Prerequisites
+
+Rust 1.88 or newer (required by Leptos 0.8; the crate uses edition 2024) and Trunk:
+
+```bash
+cargo install --locked trunk --version ~0.21
+```
+
+`rust-toolchain.toml` pins the stable channel and pulls in `clippy`, `rustfmt`
+and the `wasm32-unknown-unknown` target, so no separate `rustup target add` is
+needed.
 
 ## Structure
 
 ```
-src/index.html        page template (hero + three sections + footer), with
-                      a marker comment where the featured PR cards get
-                      spliced in and one for the "see all" link
-src/prs.html          template for the full merged-PR listing (prs.html)
-data/prs.json         merged-PR entries rendered into cards
-build.py              stdlib Python script that renders the templates and
-                      data into dist/
-Makefile              build, clean, serve targets
-tests/                unittest suite for build.py
-assets/css/style.css  shared stylesheet
-assets/js/main.js     mobile nav toggle
-assets/img/           Postage screenshots used in the project section
-.nojekyll             disables Jekyll processing on GitHub Pages
-dist/                 build output (generated, gitignored)
+src/main.rs                    app entry point
+src/lib.rs                     lib root
+src/app.rs                     root component and router
+src/pages/                     routable pages (home.rs, all_prs.rs)
+src/components/                shared UI components, including theme_toggle.rs
+src/theme.rs                   theme state and persistence
+src/data.rs                    PR loading, ranking and sorting (with unit tests)
+src/data/                      date parsing, backtick code spans, field
+                               validation, and the data error type
+data/prs.json                  PR data, embedded into the wasm bundle
+index.html                     app shell, theme-init snippet, noscript fallback
+style/main.css                 shared stylesheet
+assets/img/                    project screenshots
+Cargo.toml                     crate manifest and dependencies
+rust-toolchain.toml            toolchain, components and wasm32 target
+Trunk.toml                     Trunk build config and post-build hook
+Makefile                       serve, build, test, lint, clean targets
+.nojekyll                      tracked marker for GitHub Pages; Trunk does not
+                               copy it into dist/
+dist/                          build output (generated, gitignored)
 ```
 
 ## Build
 
 ```bash
-make build   # renders src/*.html + data/prs.json into dist/
-make clean   # removes dist/
-make serve   # builds, then serves dist/ at http://localhost:8000
+make serve       # trunk serve --open=false
+make build       # cargo test, then trunk build --release
+make build-pages # cargo test, then trunk build --release --public-url /portfolio/
+make test        # cargo test
+make lint        # cargo fmt --check, then clippy (native and wasm32) with -D warnings
+make clean       # rm -rf dist
 ```
 
-`make build` runs `python3 build.py`, which loads and validates
-`data/prs.json` and writes two pages into `dist/`:
-
-- `index.html` shows the top `FEATURED_COUNT` PRs (15, set at the top of
-  `build.py`) in rank order, followed by a "See all N merged PRs" link.
-- `prs.html` lists every PR as the same cards, newest merge first.
-
-It also copies `assets/` and `.nojekyll` into `dist/`.
+`make build` and `make build-pages` run `cargo test` first, so a malformed
+`data/prs.json` fails the build. `include_str!` only embeds the file; the data
+is validated at runtime by `load_prs`, which the `embedded_data_is_valid` test
+exercises.
 
 ## Tests
 
 ```bash
-python3 -m unittest
+make test
 ```
 
-Covers card rendering, date formatting, sorting, ranking and featured
-selection, PR data validation, and the "see all" link, including a full build
-run against a temporary project layout.
+Unit tests cover PR data validation and ranking, date parsing, backtick code
+spans, the router base path, theme selection, and the shipped `data/prs.json`.
 
 ## Adding a PR entry
 
-Add an entry to the array in `data/prs.json` with these fields:
+Add an entry to the array in `data/prs.json` with these fields. Every field is
+required, and strings must not be empty.
 
 | Field | Type | Notes |
 |---|---|---|
 | `number` | int | PR number |
-| `rank` | int | 1 to N across N entries, no gaps or repeats; ranks 1 to `FEATURED_COUNT` appear on the main page |
+| `rank` | int | 1 to N across N entries, no gaps or repeats; ranks 1 to 15 appear on the main page |
 | `url` | str | full PR URL |
 | `tag` | str | free-text category (e.g. `JSON-RPC`, `Network / TxPool`) |
 | `title` | str | sentence, may contain `` `backtick` `` code spans |
@@ -76,20 +96,28 @@ Add an entry to the array in `data/prs.json` with these fields:
 
 Backtick-delimited text in `title` and `description` is rendered as
 `<code>…</code>`. The main page shows the entries ranked 1 to 15, best rank
-first; `prs.html` shows all of them, sorted automatically by newest merge
-date first and by ascending PR number within the same date. Entries can go
-anywhere in the array, but ranks must run 1 to N with no gaps or repeats: a
-new entry either goes last as rank N, or takes an earlier rank and moves
-every entry from that rank onward down by one. `build.py` validates every
-field on build and fails loudly on a missing or malformed one, a duplicate
-rank, or a gap in the ranks, so run `make build` after editing the file to
-catch mistakes.
+first; `/prs` shows all of them, sorted automatically by newest merge date
+first and by ascending PR number within the same date. Entries can go anywhere
+in the array, but ranks must run 1 to N with no gaps or repeats: a new entry
+either goes last as rank N, or takes an earlier rank and moves every entry from
+that rank onward down by one. Run `make test` after editing the file to catch a
+missing or malformed field, a duplicate rank, or a gap in the ranks.
 
 ## Deploy
 
-The site is published with GitHub Pages at
-https://matgothmog.github.io/portfolio/. The workflow in
+GitHub Pages serves the site from `/portfolio/`. The workflow in
 `.github/workflows/deploy.yml` runs on every push to `main` (and on manual
-dispatch): it builds the site with `python3 build.py` and deploys the
-resulting `dist/` directory through the Pages Actions source. `dist/` stays
-gitignored; only the workflow publishes it.
+dispatch): it runs `cargo test`, builds the site with
+`trunk build --release --public-url /portfolio/` and deploys the resulting
+`dist/` directory through the Pages Actions source. To build the same output
+locally:
+
+```bash
+make build-pages
+```
+
+The built output is in `dist/`. The Trunk post-build hook in `Trunk.toml`
+writes copies of the app shell to `404.html`, `prs.html` and `prs/index.html`,
+so deep links such as `/portfolio/prs` and the old `/portfolio/prs.html` return
+the app instead of a Pages 404, and unknown paths render the router's Not Found
+page.

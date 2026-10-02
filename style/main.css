@@ -1,9 +1,36 @@
-/* ---------------------------------------------------------
-   Matgothmog — portfolio
-   Plain CSS, no framework, no build step.
---------------------------------------------------------- */
+/* Matgothmog — portfolio styles. Plain CSS, bundled by Trunk. */
 
+/* Colours are custom properties: light is the default, dark overrides them. */
 :root {
+  color-scheme: light;
+  --bg: #fafaf7;
+  --bg-alt: #f1f1ea;
+  --surface: #ffffff;
+  --surface-border: #e3e2da;
+  --text: #1f2937;
+  --text-dim: #475569;
+  --text-faint: #5b6577;
+  --accent: #0a7a68;
+  --accent-hover: #086454;
+  --on-accent: #ffffff;
+  --accent-soft: rgba(10, 122, 104, 0.08);
+  --accent-border: rgba(10, 122, 104, 0.3);
+  --tag-bg: rgba(31, 41, 55, 0.04);
+  --header-bg: rgba(250, 250, 247, 0.85);
+  --hero-glow: rgba(10, 122, 104, 0.1);
+  --card-shadow: 0 1px 2px rgba(31, 41, 55, 0.05), 0 4px 14px rgba(31, 41, 55, 0.05);
+  --add: #15803d;
+  --del: #b42318;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --max-width: 1100px;
+  --radius: 10px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0b0e14;
   --bg-alt: #0e1219;
   --surface: #141922;
@@ -12,16 +39,16 @@
   --text-dim: #9aa4b8;
   --text-faint: #6b7488;
   --accent: #45e8c8;
-  --accent-dim: #2b9c88;
-  --danger: #f0725f;
+  --accent-hover: #6ff0d6;
+  --on-accent: #04120f;
+  --accent-soft: rgba(69, 232, 200, 0.08);
+  --accent-border: rgba(69, 232, 200, 0.3);
+  --tag-bg: rgba(255, 255, 255, 0.04);
+  --header-bg: rgba(11, 14, 20, 0.85);
+  --hero-glow: rgba(69, 232, 200, 0.12);
+  --card-shadow: none;
   --add: #4fd88a;
   --del: #f0725f;
-
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-
-  --max-width: 1100px;
-  --radius: 10px;
 }
 
 * {
@@ -60,7 +87,7 @@ a:focus-visible {
 code {
   font-family: var(--font-mono);
   font-size: 0.9em;
-  background: rgba(69, 232, 200, 0.08);
+  background: var(--accent-soft);
   color: var(--accent);
   padding: 0.1em 0.35em;
   border-radius: 4px;
@@ -77,7 +104,7 @@ code {
   left: -9999px;
   top: 0;
   background: var(--accent);
-  color: #04120f;
+  color: var(--on-accent);
   padding: 10px 16px;
   border-radius: 0 0 8px 0;
   z-index: 100;
@@ -93,7 +120,7 @@ code {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(11, 14, 20, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--surface-border);
@@ -126,6 +153,9 @@ code {
   display: flex;
   align-items: center;
   gap: 28px;
+  order: 1;
+  margin-left: auto;
+  margin-right: 16px;
 }
 
 .site-nav a {
@@ -150,6 +180,40 @@ code {
 .nav-cta:hover {
   border-color: var(--accent);
   color: var(--accent) !important;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  order: 2;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.load-error {
+  color: var(--del);
+  border: 1px solid var(--del);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 0;
 }
 
 .nav-toggle {
@@ -179,7 +243,7 @@ code {
 .hero {
   padding: 120px 0 96px;
   background:
-    radial-gradient(ellipse 60% 50% at 50% -10%, rgba(69, 232, 200, 0.12), transparent);
+    radial-gradient(ellipse 60% 50% at 50% -10%, var(--hero-glow), transparent);
 }
 
 .hero-inner {
@@ -235,11 +299,11 @@ code {
 
 .btn-primary {
   background: var(--accent);
-  color: #04120f;
+  color: var(--on-accent);
 }
 
 .btn-primary:hover {
-  background: #6ff0d6;
+  background: var(--accent-hover);
 }
 
 .btn-outline {
@@ -306,16 +370,19 @@ code {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: var(--card-shadow);
 }
 
 .card h2,
 .card h3 {
+  overflow-wrap: anywhere;
   font-size: 1.05rem;
   line-height: 1.4;
   margin: 0;
 }
 
 .card-body {
+  overflow-wrap: anywhere;
   color: var(--text-dim);
   font-size: 0.94rem;
   margin: 0;
@@ -333,8 +400,8 @@ code {
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--accent);
-  background: rgba(69, 232, 200, 0.1);
-  border: 1px solid rgba(69, 232, 200, 0.3);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
   border-radius: 6px;
   padding: 2px 8px;
 }
@@ -342,7 +409,7 @@ code {
 .tag {
   font-size: 0.78rem;
   color: var(--text-faint);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--tag-bg);
   border: 1px solid var(--surface-border);
   border-radius: 999px;
   padding: 3px 10px;
@@ -406,8 +473,8 @@ code {
   font-size: 0.82rem;
   font-family: var(--font-mono);
   color: var(--accent);
-  background: rgba(69, 232, 200, 0.08);
-  border: 1px solid rgba(69, 232, 200, 0.25);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
   border-radius: 6px;
   padding: 4px 10px;
 }
@@ -424,11 +491,16 @@ code {
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
+/* One shared ratio keeps captions aligned; cover only trims ~5% off the shorter shot. */
 .gallery-item img {
   width: 100%;
+  aspect-ratio: 16 / 10;
   height: auto;
+  object-fit: cover;
+  object-position: top;
   border-bottom: 1px solid var(--surface-border);
 }
 
@@ -436,6 +508,22 @@ code {
   padding: 10px 14px;
   font-size: 0.85rem;
   color: var(--text-faint);
+}
+
+/* ---------- no-JS fallback ---------- */
+
+.noscript {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+
+.noscript h1 {
+  margin: 0 0 8px;
+}
+
+.noscript a {
+  color: var(--accent);
 }
 
 /* ---------- footer ---------- */
@@ -476,6 +564,7 @@ code {
     right: 0;
     background: var(--bg);
     border-bottom: 1px solid var(--surface-border);
+    margin: 0;
     flex-direction: column;
     align-items: flex-start;
     gap: 0;

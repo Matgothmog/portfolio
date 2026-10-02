@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Matgothmog — Student Software &amp; Security Engineer</title>
+    <meta name="description" content="Portfolio of Matgothmog — Ethereum client contributor and offensive-security practitioner." />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d1117'/%3E%3Ctext x='32' y='43' font-family='monospace' font-size='30' font-weight='700' fill='%2345e8c8' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+    <!-- Trunk rewrites this to the configured public URL; the app reads it to set the router base. -->
+    <base data-trunk-public-url />
+    <!-- Sets the theme before the wasm loads so the page never flashes the wrong one. -->
+    <script>
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (error) {}
+        if (theme !== "light" && theme !== "dark") {
+          try {
+            theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          } catch (error) {
+            theme = "light";
+          }
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <link data-trunk rel="css" href="style/main.css" />
+    <link data-trunk rel="copy-dir" href="assets/img" data-target-path="assets/img" />
+    <link data-trunk rel="rust" />
+  </head>
+  <body>
+    <noscript>
+      <div class="noscript">
+        <h1>Matgothmog</h1>
+        <p>Student software &amp; security engineer — Ethereum client contributor, offensive-security practitioner.</p>
+        <p>This site needs JavaScript and WebAssembly to render in full. In the meantime:</p>
+        <ul>
+          <li><a href="https://github.com/Matgothmog" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://postage-seven.vercel.app" target="_blank" rel="noopener noreferrer">Postage live demo</a></li>
+        </ul>
+      </div>
+    </noscript>
+  </body>
+</html>

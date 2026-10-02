@@ -1,10 +1,21 @@
-.PHONY: build clean serve
+.PHONY: serve build build-pages test lint clean
 
-build:
-	python3 build.py
+serve:
+	trunk serve --open=false
+
+build: test
+	trunk build --release
+
+build-pages: test
+	trunk build --release --public-url /portfolio/
+
+test:
+	cargo test
+
+lint:
+	cargo fmt --check
+	cargo clippy --all-targets -- -D warnings
+	cargo clippy --target wasm32-unknown-unknown -- -D warnings
 
 clean:
 	rm -rf dist
-
-serve: build
-	python3 -m http.server 8000 -d dist
