@@ -2,7 +2,8 @@
 
 Personal portfolio for Matgothmog — a static site covering open-source
 contributions to Nethermind, Ethereum Foundation bug-bounty work, and the
-Postage project from ETHOnline 2026.
+Postage project from ETHOnline 2026, and the Kinoflex multi-camera
+capture research project at Inria.
 
 Published at https://matgothmog.github.io/portfolio/.
 

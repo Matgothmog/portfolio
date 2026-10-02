@@ -9,7 +9,6 @@ pub fn BugBountySection() -> impl IntoView {
             id="bug-bounty"
             title="Ethereum Foundation — Bug Bounty"
             intro=|| "Findings are under coordinated disclosure / NDA. Details will be added once cleared."
-            alt=true
         >
             <div class="project-body">
                 <p>

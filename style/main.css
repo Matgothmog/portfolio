@@ -510,6 +510,30 @@ code {
   color: var(--text-faint);
 }
 
+/* Wide, low-resolution strips stay uncropped. */
+.figure-contain {
+  margin: 36px 0 28px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+
+.figure-contain img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.figure-contain figcaption {
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  border-top: 1px solid var(--surface-border);
+}
+
 /* ---------- no-JS fallback ---------- */
 
 .noscript {

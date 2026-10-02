@@ -5,19 +5,22 @@ use super::Section;
 const LIVE_DEMO_URL: &str = "https://postage-seven.vercel.app";
 const SOURCE_URL: &str = "https://github.com/Matgothmog/postage";
 
-const STACK: [&str; 12] = [
-    "Next.js 16",
-    "React 19",
-    "TypeScript",
+const STACK: [&str; 15] = [
+    "Rust",
+    "WebAssembly",
+    "Leptos 0.8",
+    "Trunk",
     "Tailwind 4",
+    "Axum",
+    "alloy",
+    "Turso (libSQL)",
+    "Cloudflare Worker (workers-rs)",
     "Privy",
     "World ID (IDKit)",
-    "viem",
-    "Turso (libSQL)",
-    "Cloudflare Worker + postal-mime",
     "Solidity 0.8.28 / Foundry (Arc testnet)",
     "The Graph subgraph",
     "Mailgun",
+    "Vercel",
 ];
 
 struct Screenshot {
@@ -84,7 +87,7 @@ fn PostageDescription() -> impl IntoView {
         <p>
             "Postage is an email gateway that puts a price on strangers' mail. You hand out a "
             <code>"you@usepostage.com"</code>
-            " address; incoming mail is held and classified — expected mail (login codes, receipts) and mail proven human-written pass free, while unproven automated mail (marketing, newsletters) must pay a small USDC fee to reach your real inbox, and deceptive mail is never delivered. Personhood is proven with a World ID Selfie Check bound onchain to a wallet; escrow, pricing signatures, and settlement run on the Arc testnet, with The Graph indexing payments and verdicts. Built during ETHOnline 2026 as a proof of concept."
+            " address; incoming mail is held and classified — expected mail (login codes, receipts) and mail proven human-written pass free, while unproven automated mail (marketing, newsletters) must pay a small USDC fee to reach your real inbox, and deceptive mail is never delivered. Personhood is proven with a World ID Selfie Check bound onchain to a wallet; escrow, pricing signatures, and settlement run on the Arc testnet, with The Graph indexing payments and verdicts. Rewritten in Rust end to end — a Leptos/WebAssembly front end, an Axum API, and a Rust Cloudflare email worker. Built during ETHOnline 2026 as a proof of concept."
         </p>
     }
 }

@@ -4,7 +4,8 @@ use leptos_router::components::A;
 use crate::app::app_href;
 
 use crate::components::{
-    BugBountySection, EnsimagSection, Hero, NethermindSection, PageShell, PostageSection,
+    BugBountySection, EnsimagSection, Hero, KinoflexSection, NethermindSection, PageShell,
+    PostageSection,
 };
 use crate::data;
 
@@ -19,9 +20,10 @@ pub fn HomePage() -> impl IntoView {
         <PageShell nav=home_nav>
             <Hero />
             <NethermindSection prs=prs />
-            <BugBountySection />
-            <EnsimagSection />
             <PostageSection />
+            <EnsimagSection />
+            <KinoflexSection />
+            <BugBountySection />
         </PageShell>
     }
 }
@@ -29,8 +31,9 @@ pub fn HomePage() -> impl IntoView {
 fn home_nav() -> impl IntoView {
     view! {
         <A href=app_href("/#nethermind")>"Nethermind"</A>
-        <A href=app_href("/#bug-bounty")>"Bug Bounty"</A>
-        <A href=app_href("/#ensimag-pentest")>"Ensimag"</A>
         <A href=app_href("/#postage")>"Postage"</A>
+        <A href=app_href("/#ensimag-pentest")>"Ensimag"</A>
+        <A href=app_href("/#inria-kinoflex")>"Kinoflex"</A>
+        <A href=app_href("/#bug-bounty")>"Bug Bounty"</A>
     }
 }
