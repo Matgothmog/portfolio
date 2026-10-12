@@ -2,6 +2,8 @@ use leptos::prelude::*;
 
 use super::Section;
 
+const REPORT_URL: &str = "https://github.com/Matgothmog/kinoflex/blob/main/report.pdf";
+
 const STACK: [&str; 12] = [
     "Python",
     "PySide6 / Qt",
@@ -86,9 +88,21 @@ pub fn KinoflexSection() -> impl IntoView {
                 />
                 <figcaption>"Nine cameras capturing the same LED frame under the hardware trigger."</figcaption>
             </figure>
+            <KinoflexLinks />
             <ul class="stack-tags">
                 {STACK.iter().map(|tag| view! { <li>{*tag}</li> }).collect_view()}
             </ul>
         </Section>
+    }
+}
+
+#[component]
+fn KinoflexLinks() -> impl IntoView {
+    view! {
+        <div class="project-links">
+            <a class="btn btn-outline" href=REPORT_URL target="_blank" rel="noopener noreferrer">
+                "Report (PDF)"
+            </a>
+        </div>
     }
 }
