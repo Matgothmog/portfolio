@@ -100,7 +100,7 @@ pub fn KinoflexSection() -> impl IntoView {
 fn KinoflexLinks() -> impl IntoView {
     view! {
         <div class="project-links">
-            <a class="btn btn-outline" href=REPORT_URL target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-green" href=REPORT_URL target="_blank" rel="noopener noreferrer">
                 "Report (PDF)"
             </a>
         </div>

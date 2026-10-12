@@ -21,6 +21,9 @@
   --card-shadow: 0 1px 2px rgba(31, 41, 55, 0.05), 0 4px 14px rgba(31, 41, 55, 0.05);
   --add: #15803d;
   --del: #b42318;
+  --green: #15803d;
+  --green-hover: #166534;
+  --on-green: #ffffff;
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -49,6 +52,9 @@
   --card-shadow: none;
   --add: #4fd88a;
   --del: #f0725f;
+  --green: #4fd88a;
+  --green-hover: #6ee7a0;
+  --on-green: #04120f;
 }
 
 * {
@@ -304,6 +310,15 @@ code {
 
 .btn-primary:hover {
   background: var(--accent-hover);
+}
+
+.btn-green {
+  background: var(--green);
+  color: var(--on-green);
+}
+
+.btn-green:hover {
+  background: var(--green-hover);
 }
 
 .btn-outline {
