@@ -1,7 +1,57 @@
 [
   {
+    "number": 14589,
+    "rank": 1,
+    "url": "https://github.com/NethermindEth/nethermind/pull/14589",
+    "tag": "Engine API / TxPool",
+    "title": "Serve the blobs of recently included transactions from `engine_getBlobs`",
+    "diff": { "add": 2142, "del": 163 },
+    "merged": "2026-10-20",
+    "description": "`engine_getBlobsV1` to `V4` read blobs from the transaction pool only, and a transaction leaves the pool when its block becomes the head, so after inclusion the handlers answered null for its blobs — while geth, reth and Besu keep serving them until finalization. The blobs are now served from the `ProcessedTxs` rows that the default `StorageWithReorgs` blob mode already persists for every included blob transaction and keeps until finalization, with no blob data held in memory: an `IncludedBlobLocations` index maps each versioned hash to its stored `(block, position, blobIndex)` — 0.4 to 1.2 MiB between the head and finality — pruned at `FinalizedBlockNumber` and capped 128 blocks behind the head, and every hit is validated against the row's hash, wrapper version and full-blob flag before serving. The head path records the locations before removing the transactions from the pool, so a blob is never missing from both. An interop improvement rather than a spec fix: callers must still tolerate null."
+  },
+  {
+    "number": 14181,
+    "rank": 6,
+    "url": "https://github.com/NethermindEth/nethermind/pull/14181",
+    "tag": "Logging (NLog/Seq)",
+    "title": "Reapply the CLI and Seq overrides after an `NLog.config` reload",
+    "diff": { "add": 246, "del": 29 },
+    "merged": "2026-10-02",
+    "description": "`NLog.config` ships with `autoReload=\"true\"`, and editing it at runtime makes NLog replace the whole configuration — but the reload handler re-applied only the file target and `Init.LogRules`, silently losing the `--log` level, `--logging-format`, the Seq URL and API key, and `Seq.MinLevel`. The Runner now subscribes to `ConfigurationChanged` at the points where startup applies each override, so NLog's subscription-order dispatch replays the startup sequence on every reload and `Init.LogRules` keeps its precedence over `--log`, exactly as at startup; each step is guarded on its own, the shutdown event is ignored, and a `--logging-format` rejected at startup is not retried. A snapshot test compares the configuration after startup and after a reload across five scenarios — and Seq delivered 20 of 20 events across a reload against 10 of 20 before."
+  },
+  {
+    "number": 14432,
+    "rank": 12,
+    "url": "https://github.com/NethermindEth/nethermind/pull/14432",
+    "tag": "Core / block processing",
+    "title": "Keep the sender-recovery loop running when a block fails to recover",
+    "diff": { "add": 35, "del": 2 },
+    "merged": "2026-10-19",
+    "description": "`RunRecoveryLoop`'s per-block `catch` rethrew, so the first block whose `Preprocess` threw escaped the loop and completed `_recoveryTask` — every block queued behind it had its waiters stranded forever, and `IsProcessingBlocks`, which requires the recovery task to be unfinished, reported the node as not processing for the rest of the process lifetime. The catch now degrades the failed block instead of rethrowing: it logs a warning, releases the block through `DecrementQueue` so its waiters get an `Exception` rather than hanging, and continues with the next block — matching what `RunProcessingLoop` already did. `OperationCanceledException` still propagates so shutdown stops the loop cleanly; the new test fails with the rethrow restored."
+  },
+  {
+    "number": 14001,
+    "rank": 13,
+    "url": "https://github.com/NethermindEth/nethermind/pull/14001",
+    "tag": "JSON-RPC",
+    "title": "Treat a null or zero `GasCap` as uncapped in `eth_call`, `eth_estimateGas` and `eth_createAccessList`",
+    "diff": { "add": 34, "del": 2 },
+    "merged": "2026-09-29",
+    "description": "`TxExecutor.ExecuteTx` compared `blockOverride?.GasLimit > _rpcConfig.GasCap!.Value`, and the lifted `>` evaluates both operands before comparing, so `GasCap!.Value` ran even when the request carried no `blockOverride`. With `JsonRpc.GasCap` set to null — one of the two values `GasCapExtensions` defines as uncapped — every `eth_call`, `eth_estimateGas` and `eth_createAccessList` failed with an internal error; with it set to 0, any `blockOverride.gasLimit` was rejected as too large. The check now reads the cap through the same `EffectiveGasCap()` helper every other consumer uses; behavior with a cap configured is unchanged."
+  },
+  {
+    "number": 13999,
+    "rank": 14,
+    "url": "https://github.com/NethermindEth/nethermind/pull/13999",
+    "tag": "JSON-RPC (log)",
+    "title": "Reject a reversed `eth_getLogs` range that ends at block zero",
+    "diff": { "add": 52, "del": 20 },
+    "merged": "2026-09-29",
+    "description": "`LogFinder.FindLogs` exempted `toBlock == 0` from its reversed-range check, so `latest` to `earliest` — and any `fromBlock` past an `earliest` `toBlock` — returned an empty result instead of `-32602 Invalid params`, while the same reversed range ending anywhere else was already rejected. Dropping the exemption makes every reversed range fail like the nonzero case, eagerly and with `EnableLogsStreamMode` on or off, matching execution-apis' requirement that clients MUST return `-32602` rather than clamp or partially answer, and geth and reth; `eth_getFilterLogs`, which resolves its stored filter through the same finder, had the same gap and is fixed with it."
+  },
+  {
     "number": 13995,
-    "rank": 11,
+    "rank": 19,
     "url": "https://github.com/NethermindEth/nethermind/pull/13995",
     "tag": "Network / eth/70 (tests)",
     "title": "Cover the `ReceiptsMessageSerializer70` wire format and guard",
@@ -11,7 +61,7 @@
   },
   {
     "number": 13996,
-    "rank": 12,
+    "rank": 21,
     "url": "https://github.com/NethermindEth/nethermind/pull/13996",
     "tag": "Core / NativeAOT",
     "title": "Skip `TypeDiscovery`'s assembly walk under NativeAOT",
@@ -21,7 +71,7 @@
   },
   {
     "number": 14004,
-    "rank": 8,
+    "rank": 18,
     "url": "https://github.com/NethermindEth/nethermind/pull/14004",
     "tag": "Core / NativeAOT",
     "title": "Preserve `ConcurrentDictionary` internals under NativeAOT",
@@ -31,7 +81,7 @@
   },
   {
     "number": 13506,
-    "rank": 1,
+    "rank": 2,
     "url": "https://github.com/NethermindEth/nethermind/pull/13506",
     "tag": "Network / TxPool",
     "title": "Reject oversized transactions before decoding",
@@ -41,7 +91,7 @@
   },
   {
     "number": 13516,
-    "rank": 10,
+    "rank": 7,
     "url": "https://github.com/NethermindEth/nethermind/pull/13516",
     "tag": "JSON-RPC (debug)",
     "title": "Check the parent's state when tracing a transaction by index",
@@ -51,7 +101,7 @@
   },
   {
     "number": 13832,
-    "rank": 2,
+    "rank": 4,
     "url": "https://github.com/NethermindEth/nethermind/pull/13832",
     "tag": "Network / P2P",
     "title": "Disconnect peers that send a second `Hello`",
@@ -61,7 +111,7 @@
   },
   {
     "number": 13833,
-    "rank": 3,
+    "rank": 5,
     "url": "https://github.com/NethermindEth/nethermind/pull/13833",
     "tag": "Engine API",
     "title": "Gate `getPayloadV3` and `getPayloadV4` on execution requests, not EIP-7623",
@@ -71,7 +121,7 @@
   },
   {
     "number": 13366,
-    "rank": 4,
+    "rank": 3,
     "url": "https://github.com/NethermindEth/nethermind/pull/13366",
     "tag": "JSON-RPC (proof)",
     "title": "Return null from the proof methods for a transaction they cannot serve",
@@ -81,7 +131,7 @@
   },
   {
     "number": 13485,
-    "rank": 16,
+    "rank": 20,
     "url": "https://github.com/NethermindEth/nethermind/pull/13485",
     "tag": "Pruning / State",
     "title": "Warn when the free-space pruning threshold is too low to ever run",
@@ -91,7 +141,7 @@
   },
   {
     "number": 13138,
-    "rank": 13,
+    "rank": 8,
     "url": "https://github.com/NethermindEth/nethermind/pull/13138",
     "tag": "JSON-RPC (debug)",
     "title": "Resolve block tags in `debug_traceTransactionByBlockAndIndex`",
@@ -101,7 +151,7 @@
   },
   {
     "number": 13275,
-    "rank": 6,
+    "rank": 10,
     "url": "https://github.com/NethermindEth/nethermind/pull/13275",
     "tag": "EF / state-test tooling (nethtest)",
     "title": "Report a state-test fixture that fails to load",
@@ -121,7 +171,7 @@
   },
   {
     "number": 13456,
-    "rank": 17,
+    "rank": 22,
     "url": "https://github.com/NethermindEth/nethermind/pull/13456",
     "tag": "Pruning / State",
     "title": "Skip the disk-space probe when the availability check is disabled",
@@ -131,7 +181,7 @@
   },
   {
     "number": 13416,
-    "rank": 9,
+    "rank": 16,
     "url": "https://github.com/NethermindEth/nethermind/pull/13416",
     "tag": "Core / monitoring",
     "title": "Stop `ElapsedMicroseconds` overflowing on long-running stopwatches",
@@ -141,7 +191,7 @@
   },
   {
     "number": 13324,
-    "rank": 14,
+    "rank": 17,
     "url": "https://github.com/NethermindEth/nethermind/pull/13324",
     "tag": "JSON-RPC (debug)",
     "title": "Dispose the block traces `debug_traceTransactionInBlockByIndex` discards",
@@ -151,7 +201,7 @@
   },
   {
     "number": 13353,
-    "rank": 5,
+    "rank": 9,
     "url": "https://github.com/NethermindEth/nethermind/pull/13353",
     "tag": "EthStats / monitoring",
     "title": "Stop a malformed EthStats ping timestamp from terminating the node",
@@ -161,7 +211,7 @@
   },
   {
     "number": 13235,
-    "rank": 7,
+    "rank": 11,
     "url": "https://github.com/NethermindEth/nethermind/pull/13235",
     "tag": "JSON-RPC",
     "title": "Reject a missing-argument marker on a required parameter",

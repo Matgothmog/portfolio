@@ -532,7 +532,7 @@ mod tests {
     #[test]
     fn embedded_data_is_valid() {
         let prs = embedded_prs().expect("data/prs.json must pass validation");
-        assert_eq!(prs.len(), 17);
+        assert_eq!(prs.len(), 22);
     }
 
     #[test]
