@@ -87,7 +87,7 @@ required, and strings must not be empty.
 | Field | Type | Notes |
 |---|---|---|
 | `number` | int | PR number |
-| `rank` | int | 1 to N across N entries, no gaps or repeats; ranks 1 to 15 appear on the main page |
+| `rank` | int | 1 to N across N entries, no gaps or repeats; ranks 1 to 4 appear on the main page |
 | `url` | str | full PR URL |
 | `tag` | str | free-text category (e.g. `JSON-RPC`, `Network / TxPool`) |
 | `title` | str | sentence, may contain `` `backtick` `` code spans |
@@ -96,7 +96,7 @@ required, and strings must not be empty.
 | `description` | str | prose, may contain `` `backtick` `` code spans |
 
 Backtick-delimited text in `title` and `description` is rendered as
-`<code>…</code>`. The main page shows the entries ranked 1 to 15, best rank
+`<code>…</code>`. The main page shows the entries ranked 1 to 4, best rank
 first; `/prs` shows all of them, sorted automatically by newest merge date
 first and by ascending PR number within the same date. Entries can go anywhere
 in the array, but ranks must run 1 to N with no gaps or repeats: a new entry

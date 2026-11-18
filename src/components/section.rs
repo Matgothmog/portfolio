@@ -6,6 +6,7 @@ pub fn Section(
     id: &'static str,
     title: &'static str,
     #[prop(into)] intro: ViewFn,
+    #[prop(optional)] eyebrow: Option<&'static str>,
     #[prop(optional)] alt: bool,
     children: Children,
 ) -> impl IntoView {
@@ -19,6 +20,7 @@ pub fn Section(
         <section class=class id=id>
             <div class="wrap">
                 <header class="section-head">
+                    {eyebrow.map(|label| view! { <p class="section-eyebrow">{label}</p> })}
                     <h2>{title}</h2>
                     <p class="section-intro">{move || intro.run()}</p>
                 </header>

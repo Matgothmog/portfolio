@@ -24,7 +24,7 @@ struct Pillar {
     body: &'static str,
 }
 
-const PILLARS: [Pillar; 6] = [
+const PILLARS: [Pillar; 4] = [
     Pillar {
         title: "Hardware synchronisation",
         body: "A Raspberry Pi Pico generates a 60 Hz trigger using a PIO state machine and DMA at 100 ns resolution, star-wired to every IMX296 global-shutter sensor so all cameras expose together.",
@@ -32,14 +32,6 @@ const PILLARS: [Pillar; 6] = [
     Pillar {
         title: "Real-time lossless compression",
         body: "A multi-process Python capture pipeline writes frame-delta + Zstandard blocks straight to NVMe, reaching 3x-6x compression and keeping each node within its write budget (~50 MB/s in the worst case, from a ~280 MB/s raw stream).",
-    },
-    Pillar {
-        title: "Single-operator fleet supervisor",
-        body: "A PySide6 GUI driven by MQTT telemetry, with 14 auto-discovered pages for live previews, health metrics and recordings, backed by a SQLite session catalogue and parallel SCP export with SHA-256 verification.",
-    },
-    Pillar {
-        title: "One-command fleet provisioning",
-        body: "An idempotent Ansible playbook brings every Raspberry Pi to the same known-good state — installing and pinning the camera stack, mounting the NVMe, applying the kernel and PCIe tweaks that eliminate write stalls, and installing the capture service — so the whole fleet can be rebuilt or extended from one command.",
     },
     Pillar {
         title: "Tested against failure",
@@ -53,13 +45,16 @@ const PILLARS: [Pillar; 6] = [
 
 #[component]
 pub fn KinoflexSection() -> impl IntoView {
-    let cards = PILLARS
+    let specs = PILLARS
         .iter()
-        .map(|pillar| {
+        .enumerate()
+        .map(|(index, pillar)| {
+            let num = format!("{:02}", index + 1);
             view! {
-                <article class="card">
+                <article class="spec-cell">
+                    <span class="spec-index">{num}</span>
                     <h3>{pillar.title}</h3>
-                    <p class="card-body">{pillar.body}</p>
+                    <p>{pillar.body}</p>
                 </article>
             }
         })
@@ -68,30 +63,47 @@ pub fn KinoflexSection() -> impl IntoView {
     view! {
         <Section
             id="inria-kinoflex"
+            eyebrow="04 // Embedded & Systems"
             title="Inria — Kinoflex: synchronised multi-camera capture"
             intro=|| "During my M1 MoSIG research internship in Inria Grenoble's Morpheo team, I built the first stage of Kinoflex — a low-cost, open-source rig of Raspberry Pi 5 cameras for synchronised 4D (volumetric) video capture, and an affordable, portable alternative to large fixed studios. A Raspberry Pi Pico broadcasts a hardware trigger to every camera; each node compresses its stream losslessly in real time; and a single operator drives the whole fleet from one GUI. This report covers a 10-node fleet, the foundation for a planned 80-camera system."
             alt=true
         >
-            <figure class="project-banner">
+            <figure class="window-frame figure-strip">
+                <div class="window-chrome" aria-hidden="true">
+                    <span class="window-dots">
+                        <span></span><span></span><span></span>
+                    </span>
+                    <span class="window-title">"kinoflex-rig · 10-node RPi5 + IMX296 cluster"</span>
+                </div>
                 <img
                     src="assets/img/kinoflex-rig.png"
                     alt="Row of ten Raspberry Pi 5 cameras mounted on tripods, wired with Ethernet and power cables, forming the Kinoflex acquisition rig"
                     loading="lazy"
                 />
             </figure>
-            <div class="card-grid">{cards}</div>
-            <figure class="figure-contain">
+            <div class="spec-matrix spec-matrix-2">{specs}</div>
+            <figure class="window-frame figure-strip figure-sync">
+                <div class="window-chrome" aria-hidden="true">
+                    <span class="window-dots">
+                        <span></span><span></span><span></span>
+                    </span>
+                    <span class="window-title">"led-probe · optical ground truth"</span>
+                </div>
                 <img
                     src="assets/img/kinoflex-sync.png"
                     alt="Kinoflex LED panel next to nine cameras' simultaneous captures of the same LED pattern under the hardware trigger"
                     loading="lazy"
                 />
-                <figcaption>"Nine cameras capturing the same LED frame under the hardware trigger."</figcaption>
+                <figcaption class="window-caption">
+                    "Nine cameras capturing the same LED frame under the hardware trigger."
+                </figcaption>
             </figure>
-            <KinoflexLinks />
-            <ul class="stack-tags">
-                {STACK.iter().map(|tag| view! { <li>{*tag}</li> }).collect_view()}
-            </ul>
+            <div class="project-footer project-footer-inline">
+                <KinoflexLinks />
+                <ul class="stack-tags">
+                    {STACK.iter().map(|tag| view! { <li>{*tag}</li> }).collect_view()}
+                </ul>
+            </div>
         </Section>
     }
 }

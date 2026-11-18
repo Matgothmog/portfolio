@@ -17,7 +17,12 @@ pub fn NethermindSection(prs: Result<Vec<Pr>, String>) -> impl IntoView {
     };
 
     view! {
-        <Section id="nethermind" title="Open-source: Nethermind" intro=nethermind_intro>
+        <Section
+            id="nethermind"
+            eyebrow="01 // Open Source"
+            title="Open-source: Nethermind"
+            intro=nethermind_intro
+        >
             {body}
         </Section>
     }
@@ -42,7 +47,7 @@ fn FeaturedPrs(prs: Vec<Pr>) -> impl IntoView {
         .collect_view();
 
     view! {
-        <div class="card-grid">{cards}</div>
+        <div class="card-grid card-grid-2">{cards}</div>
         <p class="section-cta">
             <A href=app_href("/prs") attr:class="btn btn-outline">
                 {label}

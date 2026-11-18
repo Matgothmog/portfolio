@@ -44,7 +44,7 @@ fn focus_main() {
 
 /// The router scrolls to a `#hash` before a freshly navigated page has rendered, and a
 /// direct `/#section` load has no target yet either, so scroll once the page is mounted.
-fn scroll_to_hash_after_mount() {
+pub fn scroll_to_hash_after_mount() {
     let hash = use_location().hash;
     Effect::new(move |_| {
         let hash = hash.get();

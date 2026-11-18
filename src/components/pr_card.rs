@@ -24,6 +24,9 @@ pub fn PrCard(pr: Pr, heading_level: u8) -> impl IntoView {
                 </span>
             </div>
             {heading}
+            <p class="card-body">
+                <InlineText text=pr.description.clone() />
+            </p>
             <p class="card-meta">
                 <span class="diff">
                     <span class="add">{format!("+{}", pr.diff.add)}</span>
@@ -32,9 +35,6 @@ pub fn PrCard(pr: Pr, heading_level: u8) -> impl IntoView {
                 </span>
                 <span class="sep">"·"</span>
                 <span>{format!("Merged {}", pr.merged.display_long())}</span>
-            </p>
-            <p class="card-body">
-                <InlineText text=pr.description.clone() />
             </p>
         </article>
     }

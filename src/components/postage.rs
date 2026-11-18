@@ -58,23 +58,32 @@ pub fn PostageSection() -> impl IntoView {
     view! {
         <Section
             id="postage"
+            eyebrow="02 // Featured Project"
             title="Postage — ETHOnline 2026"
             intro=|| "An email gateway that puts a price on strangers' mail."
             alt=true
         >
-            <figure class="project-banner">
-                <img
-                    src="assets/img/postage-cover.png"
-                    alt="Postage project cover banner"
-                    loading="lazy"
-                />
-            </figure>
-            <div class="project-body">
-                <PostageDescription />
-                <PostageLinks />
-                <ul class="stack-tags">
-                    {STACK.iter().map(|tag| view! { <li>{*tag}</li> }).collect_view()}
-                </ul>
+            <div class="project-split">
+                <div class="project-body">
+                    <PostageDescription />
+                    <PostageLinks />
+                    <ul class="stack-tags">
+                        {STACK.iter().map(|tag| view! { <li>{*tag}</li> }).collect_view()}
+                    </ul>
+                </div>
+                <figure class="window-frame">
+                    <div class="window-chrome" aria-hidden="true">
+                        <span class="window-dots">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span class="window-title">"usepostage.com"</span>
+                    </div>
+                    <img
+                        src="assets/img/postage-cover.png"
+                        alt="Postage project cover banner"
+                        loading="lazy"
+                    />
+                </figure>
             </div>
             <Gallery />
         </Section>

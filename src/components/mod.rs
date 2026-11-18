@@ -1,10 +1,10 @@
 //! Small view components: one per section or card.
 
 mod bug_bounty;
+mod cv_profile;
 mod ensimag;
 mod footer;
 mod header;
-mod hero;
 mod inline_text;
 mod kinoflex;
 mod layout;
@@ -17,13 +17,13 @@ mod section;
 mod theme_toggle;
 
 pub use bug_bounty::BugBountySection;
+pub use cv_profile::{SplitAboutSection, SplitExperienceSection};
 pub use ensimag::EnsimagSection;
 pub use footer::Footer;
 pub use header::Header;
-pub use hero::Hero;
 pub use inline_text::InlineText;
 pub use kinoflex::KinoflexSection;
-pub use layout::PageShell;
+pub use layout::{PageShell, scroll_to_hash_after_mount};
 pub use nethermind::NethermindSection;
 pub use not_found::NotFound;
 pub use postage::PostageSection;

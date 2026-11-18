@@ -17,7 +17,7 @@ pub use error::DataError;
 pub use inline::{Segment, parse_inline};
 
 /// How many top-ranked PRs the home page shows; the rest live on the all-PRs page.
-pub const FEATURED_COUNT: usize = 15;
+pub const FEATURED_COUNT: usize = 4;
 
 const EMBEDDED_PRS_JSON: &str = include_str!("../data/prs.json");
 
@@ -536,8 +536,8 @@ mod tests {
     }
 
     #[test]
-    fn embedded_data_features_ranks_one_to_fifteen() {
+    fn embedded_data_features_ranks_one_to_four() {
         let prs = embedded_prs().unwrap();
-        assert_eq!(ranks(&featured(&prs)), (1..=15).collect::<Vec<u32>>());
+        assert_eq!(ranks(&featured(&prs)), (1..=4).collect::<Vec<u32>>());
     }
 }
