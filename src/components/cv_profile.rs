@@ -4,7 +4,7 @@ use super::Section;
 
 const NETHERMIND_PRS_URL: &str =
     "https://github.com/NethermindEth/nethermind/pulls?q=author%3AMatgothmog";
-const EF_BOUNTY_URL: &str = "https://ethereum.org/en/bug-bounty/#leaderboard";
+const EF_BOUNTY_URL: &str = "https://ethereum.org/bug-bounty/#leaderboard";
 
 struct SkillArea {
     label: &'static str,
@@ -55,7 +55,7 @@ const EXPERIENCES: [ExperienceItem; 6] = [
         role: "Bug Bounty Researcher",
         org: "Ethereum Foundation — Bug Bounty Program",
         location: "Remote",
-        summary: "Vulnerability research on Ethereum clients and protocol specifications; ranked 82nd of 99 researchers on the execution-layer leaderboard (1,000 pts, Matgothmog).",
+        summary: "Vulnerability research on Ethereum clients and protocol specifications; ranked 60th of 62 on the Consensus Layer leaderboard (250 pts) and 85th of 100 on the Execution Layer leaderboard (1,000 pts).",
         url: Some(EF_BOUNTY_URL),
         tags: &[
             "Vulnerability research",

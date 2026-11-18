@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use super::Section;
 
-const LEADERBOARD_URL: &str = "https://ethereum.org/en/bug-bounty/#leaderboard";
+const LEADERBOARD_URL: &str = "https://ethereum.org/bug-bounty/#leaderboard";
 
 #[component]
 pub fn BugBountySection() -> impl IntoView {
@@ -16,9 +16,9 @@ pub fn BugBountySection() -> impl IntoView {
             <div class="bento-credential">
                 <div class="credential-main">
                     <span class="credential-badge">"Coordinated Disclosure · Active"</span>
-                    <h3>"Execution-Layer Security Research"</h3>
+                    <h3>"Consensus & Execution Layer Research"</h3>
                     <p>
-                        "Recognized on the official Ethereum Foundation bug-bounty leaderboard for execution-layer vulnerability research."
+                        "Recognized on both official Ethereum Foundation bug-bounty leaderboards for protocol and client vulnerability research."
                     </p>
                     <a
                         class="btn btn-outline"
@@ -31,16 +31,16 @@ pub fn BugBountySection() -> impl IntoView {
                 </div>
                 <div class="credential-stats">
                     <div class="credential-stat">
-                        <span class="metric-value">"82nd"</span>
-                        <span class="metric-label">"of 99 researchers"</span>
+                        <span class="metric-value">"60th / 62"</span>
+                        <span class="metric-label">"Consensus Layer · 250 pts"</span>
                     </div>
                     <div class="credential-stat">
-                        <span class="metric-value">"1,000"</span>
-                        <span class="metric-label">"Leaderboard points"</span>
+                        <span class="metric-value">"85th / 100"</span>
+                        <span class="metric-label">"Execution Layer · 1,000 pts"</span>
                     </div>
                     <div class="credential-stat">
-                        <span class="metric-value">"EL"</span>
-                        <span class="metric-label">"Execution layer scope"</span>
+                        <span class="metric-value">"1,250"</span>
+                        <span class="metric-label">"Combined leaderboard points"</span>
                     </div>
                 </div>
             </div>
